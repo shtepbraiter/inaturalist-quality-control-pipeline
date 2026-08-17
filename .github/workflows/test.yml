@@ -46,7 +46,7 @@ jobs:
       - name: Run tests
         run: ${{ inputs.test-command }}
         env:
-          INATURALIST_API_TOKEN: ${{ secrets.INATURALIST_API_TOKEN }}  //get on https://www.inaturalist.org/users/api_token and put here https://github.com/shtepbraiter/inaturalist-quality-control-pipeline/settings/secrets/actions
+          INATURALIST_API_TOKEN: ${{ secrets.INATURALIST_API_TOKEN }}  
 
       - name: Upload test results
         if: always()
