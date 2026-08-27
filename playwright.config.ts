@@ -1,4 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+
+if (!process.env.CI) {
+  dotenv.config();
+}
 
 export default defineConfig({
   testDir: './src/tests',
