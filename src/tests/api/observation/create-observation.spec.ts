@@ -9,7 +9,6 @@ test.describe('Observations API', () => {
   test.afterEach(async ({ request }) => {
     if (observationId) {
       const { status } = await deleteObservation(request, observationId, token);
-      console.log(`Deleted observation ${observationId}, status: ${status}`);
       observationId = undefined;
     }
   });
@@ -38,7 +37,6 @@ test.describe('Observations API', () => {
     expect(createResponse.status()).toBe(200);
 
     const { status, body } = await getObservation(request, observationId);
-    console.log('Get observation status:', status);
 
     expect(status).toBe(200);
     expect(body.results[0].species_guess).toBe('Elaphe dione');
@@ -61,7 +59,6 @@ test.describe('Observations API', () => {
     });
 
     const body = await response.json();
-    console.log('Empty fields status:', response.status());
 
     expect(response.status()).toBe(500);
     expect(body).toHaveProperty('error');
@@ -84,7 +81,6 @@ test.describe('Observations API', () => {
     });
 
     const body = await response.json();
-    console.log('species_guess only status:', response.status());
 
     expect(response.status()).toBe(200);
     expect(body).not.toHaveProperty('error');
@@ -107,8 +103,6 @@ test.describe('Observations API', () => {
         },
       },
     });
-
-    console.log('random taxon_id status:', response.status());
 
     expect(response.status()).toBe(200); //inaturalist have no field's validation
   });
