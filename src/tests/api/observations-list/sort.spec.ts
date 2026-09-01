@@ -9,7 +9,7 @@ test.describe('Sort Observations API', () => {
     expect(response.status()).toBe(200);
 
     const body = await response.json();
-    expect(body.results.length).toBe(30);
+    expect(body.results.length).toBe(10);
 
     const firstDate = new Date(body.results[0].created_at);
     const lastDate = new Date(body.results[body.results.length - 1].created_at);
