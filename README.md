@@ -6,3 +6,4 @@ It’s not just about running tests; it's about building a robust, maintainable,
 # How to
 INATURALIST_API_TOKEN - now 24 hours JWT-token used. Copy token on the page https://www.inaturalist.org/users/api_token and put here https://github.com/shtepbraiter/inaturalist-quality-control-pipeline/settings/secrets/actions
 
+To run tests locally create .env file with your token INATURALIST_API_TOKEN="token"
