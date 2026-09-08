@@ -8,9 +8,16 @@ jobs:
   setup:
     uses: ./.github/workflows/setup.yml
 
-  test:
-    needs: setup  
+  api-tests:
+    needs: setup
     uses: ./.github/workflows/test.yml
     secrets: inherit
     with:
-      test-command: "npx playwright test"
+      test-command: "npx playwright test src/tests/api"
+
+  ui-tests:
+    needs: setup
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+    with:
+      test-command: "npx playwright test src/tests/UI"
