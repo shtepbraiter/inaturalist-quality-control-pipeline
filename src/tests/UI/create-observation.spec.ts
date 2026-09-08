@@ -5,7 +5,8 @@ test.describe('Create Observation', () => {
 
   const token = process.env.INATURALIST_API_TOKEN;
   //TODO Add use EN 
-  test('upload page has file selection button', async ({ page, request }) => {
+  
+  test('Create Observation', async ({ page, request }) => {
     if (!token) {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
