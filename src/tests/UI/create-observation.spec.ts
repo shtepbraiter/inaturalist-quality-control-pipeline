@@ -1,12 +1,21 @@
 import { test, expect } from '@playwright/test';
-import { deleteLatestByUser } from '../../api/observation';
+import { deleteObservation } from '../../api/observation';
 
 test.describe('Create Observation', () => {
 
+  let observationId: number | undefined;
   const token = process.env.INATURALIST_API_TOKEN;
-  //TODO Add use EN 
-  
-  test('Create Observation', async ({ page, request }) => {
+  //TODO Add use EN
+
+  test.afterEach(async ({ request }) => {
+    if (observationId && token) {
+      const { status } = await deleteObservation(request, observationId, token);
+      console.log(`Deleted observation ${observationId}, status: ${status}`);
+      observationId = undefined;
+    }
+  });
+
+  test('should submit observation without media and verify redirect', async ({ page, request }) => {
     if (!token) {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
@@ -37,9 +46,9 @@ test.describe('Create Observation', () => {
     await expect(obsCard).toBeVisible();
 
     const taxonInput = obsCard.locator('input[type="text"][name="taxon_name"]');
-    await taxonInput.fill('Elaphe dione');
+    await taxonInput.fill('Xenodon dorbignyi');
 
-    const taxonSuggestion = page.locator('[data-taxon-id="30282"]');
+    const taxonSuggestion = page.locator('[data-taxon-id="146537"]');
     await taxonSuggestion.click();
 
     const calendarIcon = obsCard.locator('input.form-control.input-sm[placeholder="Дата"]');
@@ -66,11 +75,15 @@ test.describe('Create Observation', () => {
     const confirmButton = modal.locator('.btn.btn-primary');
     await confirmButton.click();
 
-    await expect(page.getByText('Сохранение наблюдения...')).toBeVisible();
+    await expect(page.getByText('Сохранение наблюдения...')).toBeVisible({ timeout: 30000 });
 
     await expect(page).toHaveURL(/\/observations\/shtepbraiter/, { timeout: 30000 });
 
-    const result = await deleteLatestByUser(request, 'shtepbraiter', token);
-    console.log('Delete result:', JSON.stringify(result, null, 2));
+    const response = await request.get(
+      './observations?user_login=shtepbraiter&taxon_id=146537&order=desc&order_by=created_at&per_page=1',
+    );
+    const body = await response.json();
+    observationId = body.results[0]?.id;
+    console.log(`Captured observation ID: ${observationId}`);
   });
 });

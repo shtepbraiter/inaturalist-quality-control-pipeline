@@ -18,7 +18,7 @@ test.describe('Observations API', () => {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
 
-    const createResponse = await request.post('https://api.inaturalist.org/v1/observations', {
+    const createResponse = await request.post('./observations', {
       headers: {
         Authorization: token,
       },
@@ -44,12 +44,12 @@ test.describe('Observations API', () => {
     expect(body.results[0].geojson.coordinates).toEqual([76.86679, 43.32018]);
   });
 
-  test('POST /observations with empty fields should return an error', async ({ request }) => {
+  test('POST /observations with empty fields should return 500', async ({ request }) => {
     if (!token) {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
 
-    const response = await request.post('https://api.inaturalist.org/v1/observations', {
+    const response = await request.post('./observations', {
       headers: {
         Authorization: token,
       },
@@ -64,12 +64,12 @@ test.describe('Observations API', () => {
     expect(body).toHaveProperty('error');
   });
 
-  test('POST /observations with the only one field should succeed', async ({ request }) => {
+  test('POST /observations with a single field should succeed', async ({ request }) => {
     if (!token) {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
 
-    const response = await request.post('https://api.inaturalist.org/v1/observations', {
+    const response = await request.post('./observations', {
       headers: {
         Authorization: token,
       },
@@ -81,19 +81,20 @@ test.describe('Observations API', () => {
     });
 
     const body = await response.json();
+    observationId = body.id;
 
     expect(response.status()).toBe(200);
     expect(body).not.toHaveProperty('error');
 
-    observationId = body.id;
+    
   });
 
-  test('POST /observations with random photo_license should not return an error', async ({ request }) => {
+  test('POST /observations with random photo_license should succeed', async ({ request }) => {
     if (!token) {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
 
-    const response = await request.post('https://api.inaturalist.org/v1/observations', {
+    const response = await request.post('./observations', {
       headers: {
         Authorization: token,
       },
@@ -103,6 +104,9 @@ test.describe('Observations API', () => {
         },
       },
     });
+
+    const body = await response.json();
+    observationId = body.id;
 
     expect(response.status()).toBe(200); //inaturalist have no field's validation
   });

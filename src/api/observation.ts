@@ -1,9 +1,7 @@
 import { APIRequestContext } from '@playwright/test';
 
-const API_BASE = 'https://api.inaturalist.org/v1';
-
 export async function createObservation(request: APIRequestContext, token: string) {
-  const response = await request.post(`${API_BASE}/observations`, {
+  const response = await request.post(`./observations`, {
     headers: {
       Authorization: token,
     },
@@ -25,7 +23,7 @@ export async function getObservation(
   request: APIRequestContext,
   observationId: number,
 ) {
-  const response = await request.get(`${API_BASE}/observations/${observationId}`);
+  const response = await request.get(`./observations/${observationId}`);
 
   const body = await response.json();
   return { status: response.status(), body };
@@ -37,7 +35,7 @@ export async function updateObservation(
   payload: { species_guess?: string },
   token: string,
 ) {
-  const response = await request.put(`${API_BASE}/observations/${observationId}`, {
+  const response = await request.put(`./observations/${observationId}`, {
     headers: {
       Authorization: token,
     },
@@ -55,7 +53,7 @@ export async function deleteObservation(
   observationId: number,
   token: string,
 ) {
-  const response = await request.delete(`${API_BASE}/observations/${observationId}`, {
+  const response = await request.delete(`./observations/${observationId}`, {
     headers: {
       Authorization: token,
     },
@@ -71,7 +69,7 @@ export async function deleteLatestByUser(
   token: string,
 ) {
   const response = await request.get(
-    `${API_BASE}/observations?user_login=${username}&order=desc&order_by=created_at&per_page=1`
+    `./observations?user_login=${username}&order=desc&order_by=created_at&per_page=1`
   );
 
   const body = await response.json();

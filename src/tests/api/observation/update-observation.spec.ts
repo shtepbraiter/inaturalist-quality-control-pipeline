@@ -18,7 +18,7 @@ test.describe('Update Observation API', () => {
     }
   });
 
-  test('should update species_guess on created observation', async ({ request }) => {
+  test('PUT /observations/:id should update species_guess on created observation', async ({ request }) => {
     if (!token) {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
@@ -27,7 +27,7 @@ test.describe('Update Observation API', () => {
     expect(createStatus).toBe(200);
     observationId = createBody.id;
 
-    const updateResponse = await request.put(`https://api.inaturalist.org/v1/observations/${observationId}`, {
+    const updateResponse = await request.put(`./observations/${observationId}`, {
       headers: {
         Authorization: token,
       },
@@ -48,7 +48,7 @@ test.describe('Update Observation API', () => {
     expect(getBody.results[0].species_guess).toBe('Vipera berus');
   });
 
-  test('should update species_guess with non-existent species name', async ({ request }) => {
+  test('PUT /observations/:id should accept any string as species_guess', async ({ request }) => {
     if (!token) {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
@@ -57,7 +57,7 @@ test.describe('Update Observation API', () => {
     expect(createStatus).toBe(200);
     observationId = createBody.id;
 
-    const updateResponse = await request.put(`https://api.inaturalist.org/v1/observations/${observationId}`, {
+    const updateResponse = await request.put(`./observations/${observationId}`, {
       headers: {
         Authorization: token,
       },

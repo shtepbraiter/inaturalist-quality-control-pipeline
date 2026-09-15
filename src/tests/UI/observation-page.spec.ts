@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Observation Page', () => {
-  test('Observation info on the page', async ({ page }) => {
+  test('should display species, user, gallery, and map', async ({ page }) => {
     await page.goto('https://www.inaturalist.org/observations/393858124');
 
     const body = page.locator('body');
@@ -20,7 +20,7 @@ test.describe('Observation Page', () => {
     await expect(map).toBeVisible();
   });
 
-  test('Activity info on the page', async ({ page }) => {
+  test('should verify identification count and first identifier', async ({ page }) => {
     await page.goto('https://www.inaturalist.org/observations/393858124');
     
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
@@ -36,7 +36,7 @@ test.describe('Observation Page', () => {
     await expect(firstIdentification).toContainText('Steppe Ratsnake');
   });
 
-  test('Projects info on the page', async ({ page }) => {
+  test('should show project panel with project links', async ({ page }) => {
     await page.goto('https://www.inaturalist.org/observations/393858124');
 
     const projectsPanel = page.locator('#projects-panel');
