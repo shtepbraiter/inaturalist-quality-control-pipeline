@@ -16,7 +16,7 @@ export default defineConfig({
     ['list']
   ],
   use: {
-    baseURL: 'https://api.inaturalist.org/v1',
+    baseURL: 'https://api.inaturalist.org/v1/',
     headless: true,
     extraHTTPHeaders: {
       'Accept': 'application/json',

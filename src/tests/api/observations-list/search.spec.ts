@@ -4,7 +4,7 @@ async function isAlmaty(request: APIRequestContext, location: string): Promise<b
   const [lat, lon] = location.split(',').map(Number);
   const delta = 0.1;
   const response = await request.get(
-    `https://api.inaturalist.org/v1/places/nearby?nelat=${lat + delta}&nelng=${lon + delta}&swlat=${lat - delta}&swlng=${lon - delta}`
+    `./places/nearby?nelat=${lat + delta}&nelng=${lon + delta}&swlat=${lat - delta}&swlng=${lon - delta}`
   );
   const body = await response.json();
   const places = [...body.results.standard, ...body.results.community];
@@ -14,7 +14,7 @@ async function isAlmaty(request: APIRequestContext, location: string): Promise<b
 test.describe('User Observations API', () => {
   test('GET /observations by user should return 30 observations by default', async ({ request }) => {
     const response = await request.get(
-      'https://api.inaturalist.org/v1/observations?user_id=shtepbraiter'
+      './observations?user_id=shtepbraiter'
     );
 
     expect(response.status()).toBe(200);
@@ -27,7 +27,7 @@ test.describe('User Observations API', () => {
 
   test('GET /observations by user with per_page=10 should return 10 observations', async ({ request }) => {
     const response = await request.get(
-      'https://api.inaturalist.org/v1/observations?user_id=shtepbraiter&per_page=10'
+      './observations?user_id=shtepbraiter&per_page=10'
     );
 
     expect(response.status()).toBe(200);
@@ -39,7 +39,7 @@ test.describe('User Observations API', () => {
 
   test('GET /observations by city name Almaty should return observations with location in Almaty', async ({ request }) => {
     const response = await request.get(
-      'https://api.inaturalist.org/v1/observations?q=Almaty&per_page=10'
+      './observations?q=Almaty&per_page=10'
     );
 
     expect(response.status()).toBe(200);
@@ -55,7 +55,7 @@ test.describe('User Observations API', () => {
 
   test('GET /observations by taxon snakes should return observations with snake taxon', async ({ request }) => {
     const response = await request.get(
-      'https://api.inaturalist.org/v1/observations?taxon_id=85553&per_page=10'
+      './observations?taxon_id=85553&per_page=10'
     );
 
     expect(response.status()).toBe(200);
@@ -70,7 +70,7 @@ test.describe('User Observations API', () => {
 
   test('GET /observations by city Almaty and taxon snakes should return observations in Almaty with snake taxon', async ({ request }) => {
     const response = await request.get(
-      'https://api.inaturalist.org/v1/observations?place_id=10941&taxon_id=85553&per_page=10'
+      './observations?place_id=10941&taxon_id=85553&per_page=10'
     );
 
     expect(response.status()).toBe(200);

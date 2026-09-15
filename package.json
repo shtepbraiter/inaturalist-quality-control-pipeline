@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "test": "npx playwright test",
+    "test:api": "npx playwright test src/tests/api",
+    "test:ui": "npx playwright test src/tests/UI"
+  },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "@types/node": "^26.1.2",

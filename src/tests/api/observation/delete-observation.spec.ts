@@ -8,7 +8,7 @@ test.describe('Delete Observation API', () => {
 
   test.afterEach(async ({ request }) => {
     if (observationId && token) {
-      await request.delete(`https://api.inaturalist.org/v1/observations/${observationId}`, {
+      await request.delete(`./observations/${observationId}`, {
         headers: { Authorization: token },
       });
       observationId = undefined;
@@ -24,7 +24,7 @@ test.describe('Delete Observation API', () => {
     expect(createStatus).toBe(200);
     observationId = createBody.id;
 
-    const deleteResponse = await request.delete(`https://api.inaturalist.org/v1/observations/${observationId}`, {
+    const deleteResponse = await request.delete(`./observations/${observationId}`, {
       headers: { Authorization: token },
     });
     expect(deleteResponse.status()).toBe(200);

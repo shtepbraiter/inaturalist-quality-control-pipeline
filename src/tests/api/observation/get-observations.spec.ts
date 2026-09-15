@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Observations API', () => {
   test('GET /observations/:id should return an observation', async ({ request }) => {
     const observationId = 1000000;
-    const response = await request.get(`https://api.inaturalist.org/v1/observations/${observationId}`);
+    const response = await request.get(`./observations/${observationId}`);
 
     expect(response.status()).toBe(200);
 
