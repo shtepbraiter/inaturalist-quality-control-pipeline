@@ -15,7 +15,7 @@ test.describe('Create Observation', () => {
     }
   });
 
-  test('should submit observation without media and verify redirect', async ({ page, request }) => {
+  test('should submit observation without media and verify redirect', async ({ page }) => {
     if (!token) {
       throw new Error('INATURALIST_API_TOKEN environment variable is required');
     }
@@ -75,15 +75,18 @@ test.describe('Create Observation', () => {
     const confirmButton = modal.locator('.btn.btn-primary');
     await confirmButton.click();
 
+    const saveResponsePromise = page.waitForResponse(
+      (resp) => resp.url().includes('/observations') && resp.request().method() === 'POST',
+      { timeout: 30000 },
+    );
+
     await expect(page.getByText('Сохранение наблюдения...')).toBeVisible({ timeout: 30000 });
 
-    await expect(page).toHaveURL(/\/observations\/shtepbraiter/, { timeout: 30000 });
-
-    const response = await request.get(
-      './observations?user_login=shtepbraiter&taxon_id=146537&order=desc&order_by=created_at&per_page=1',
-    );
-    const body = await response.json();
-    observationId = body.results[0]?.id;
+    const saveResponse = await saveResponsePromise;
+    const saveBody = await saveResponse.json();
+    observationId = Array.isArray(saveBody) ? saveBody[0]?.id : saveBody?.id;
     console.log(`Captured observation ID: ${observationId}`);
+
+    await expect(page).toHaveURL(/\/observations\/shtepbraiter/, { timeout: 30000 });
   });
 });

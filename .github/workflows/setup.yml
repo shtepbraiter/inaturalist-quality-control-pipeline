@@ -2,17 +2,11 @@ name: Setup Environment
 
 on:
   workflow_call:
-    outputs:
-      cache-key:
-        description: "cache key for setup"
-        value: ${{ jobs.setup.outputs.cache-key }}
 
 jobs:
   setup:
     name: Install Dependencies & Prepare Environment
     runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.cache.outputs.cache-key }}
     
     steps:
       - name: Checkout code
@@ -41,9 +35,3 @@ jobs:
       - name: Install Playwright Browsers
         if: steps.cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps chromium
-
-      - name: Save cache key as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: cache-key
-          path: cache-key.txt
