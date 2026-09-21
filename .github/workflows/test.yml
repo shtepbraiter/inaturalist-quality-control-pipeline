@@ -1,22 +1,12 @@
 name: Run Tests
 
 on:
-  workflow_run:
-    workflows: [setup]
-    types:
-      - completed
-
   workflow_call:
     inputs:
       test-command:
         description: "run tests command"
         required: false
         default: "npx playwright test"
-        type: string
-      test-path:
-        description: "tests path"
-        required: false
-        default: "./src/tests"
         type: string
 
 jobs:

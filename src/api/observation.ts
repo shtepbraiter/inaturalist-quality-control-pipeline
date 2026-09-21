@@ -29,25 +29,6 @@ export async function getObservation(
   return { status: response.status(), body };
 }
 
-export async function updateObservation(
-  request: APIRequestContext,
-  observationId: number,
-  payload: { species_guess?: string },
-  token: string,
-) {
-  const response = await request.put(`./observations/${observationId}`, {
-    headers: {
-      Authorization: token,
-    },
-    data: {
-      observation: payload,
-    },
-  });
-
-  const body = await response.json();
-  return { status: response.status(), body };
-}
-
 export async function deleteObservation(
   request: APIRequestContext,
   observationId: number,
@@ -59,30 +40,14 @@ export async function deleteObservation(
     },
   });
 
-  const body = await response.json();
+  let body: unknown;
+  const text = await response.text();
+  if (text) {
+    try {
+      body = JSON.parse(text);
+    } catch {
+      body = text;
+    }
+  }
   return { status: response.status(), body };
-}
-
-export async function deleteLatestByUser(
-  request: APIRequestContext,
-  username: string,
-  token: string,
-) {
-  const response = await request.get(
-    `./observations?user_login=${username}&order=desc&order_by=created_at&per_page=1`
-  );
-
-  const body = await response.json();
-  const observation = body.results[0];
-  if (!observation) {
-    return { deleted: false, reason: 'no observations found' };
-  }
-
-  const latinName = observation.taxon?.name;
-  if (latinName !== 'Elaphe dione') {
-    return { deleted: false, reason: `species is ${latinName}, not Elaphe dione` };
-  }
-
-  const { status } = await deleteObservation(request, observation.id, token);
-  return { deleted: status === 200, observationId: observation.id };
 }

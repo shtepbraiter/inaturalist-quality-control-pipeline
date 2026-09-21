@@ -7,7 +7,7 @@ test.describe('Observations API', () => {
   const token = process.env.INATURALIST_API_TOKEN;
 
   test.afterEach(async ({ request }) => {
-    if (observationId) {
+    if (observationId && token) {
       const { status } = await deleteObservation(request, observationId, token);
       observationId = undefined;
     }
